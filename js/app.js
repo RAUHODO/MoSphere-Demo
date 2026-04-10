@@ -635,7 +635,7 @@ function renderConvAccordion() {
   document.getElementById('conv-accordion').innerHTML = `
     <div class="accordion-item" id="conv-outer-item">
       <div class="accordion-header ${openConvs.has(-1) ? 'open' : ''}" onclick="toggleConvOuter()">
-        <span class="accordion-title">💬 ${lbl.conversations}</span>
+        <span class="accordion-title">${lbl.conversations}</span>
         <span class="accordion-chevron">▾</span>
       </div>
       <div class="accordion-body ${openConvs.has(-1) ? 'open' : ''}" id="conv-outer-body">
