@@ -298,9 +298,9 @@
     },
     {
       "id": "merchant",
-      "name": "The Merchant's Donkey",
-      "npc_name": "Nomadic Merchant",
-      "npc_title": "@Merchant",
+      "name": "Church of Elleh",
+      "npc_name": "Kale",
+      "npc_title": "@Kale",
       "emoji": "💰",
       "description": "The ledger-keeper. Idle in manner, precise in every rune.",
       "recent_logs": [
@@ -634,7 +634,7 @@
       "id": 6,
       "category": "Facility",
       "status": "open",
-      "content": "Could a practice dummy be added at the Site of Grace?"
+      "content": "Could a practice dummy be added at the Roundtable Hold?"
     },
     {
       "id": 7,
@@ -721,24 +721,27 @@
     "steps": {
       "average": 11500,
       "trend": "▲2100"
-    }
+    },
+    "notes": "Gold-Pickled Fowl Foot intake is excessive. I know it increases rune acquisition — but your stomach is not a forge."
   },
   "trades": {
     "open_positions": [
       {
         "date": "2026-04-05",
         "asset": "Somber Smithing Stone [8]",
-        "type": "Spot holding",
+        "type": "Loot stockpile",
         "direction": "Long",
-        "price": "15,000/ea",
-        "status": "🟡"
+        "price": "Cost 90,000 · Est. 120,000",
+        "status": "🟡",
+        "cost": 90000,
+        "value": 120000
       },
       {
         "date": "2026-04-10",
         "asset": "Somber Ancient Dragon Smithing Stone",
-        "type": "Collectible",
+        "type": "Loot",
         "direction": "Long",
-        "price": "200,000",
+        "price": "—",
         "status": "🟢"
       },
       {
@@ -755,7 +758,9 @@
         "date": "2026-04-12",
         "asset": "Somber Smithing Stone [7]",
         "type": "Short trade",
-        "pnl": "+56,000 runes"
+        "pnl": "+40,000 runes",
+        "cost": 72000,
+        "sell": 112000
       },
       {
         "date": "2026-04-08",
@@ -767,8 +772,8 @@
   },
   "finance": {
     "monthly_income": 1083000,
-    "monthly_expense": 591000,
-    "net": 492000,
+    "monthly_expense": 590200,
+    "net": 492800,
     "currency": "Runes",
     "recent_transactions": [
       {
@@ -791,8 +796,8 @@
       },
       {
         "date": "2026-04-14",
-        "description": "Smithing Stone [3]",
-        "amount": 2400,
+        "description": "Smithing Stone [3] x8",
+        "amount": 19200,
         "type": "expense"
       },
       {
@@ -804,9 +809,10 @@
     ],
     "fixed_expenses": {
       "income": 1083000,
-      "expense": 591000
+      "expense": 590200
     },
-    "fixed_assets": 1960000
+    "fixed_assets": 1960000,
+    "fixed_assets_note": "Equipment valuation is based on my buy-in price. The Hound's Tooth I can only resell — I have no use for it myself."
   },
   "archive": {
     "confirmed": [
@@ -884,7 +890,7 @@
       },
       {
         "key": "Sellen's assessment",
-        "value": "Had he chosen the sorcerous path, he would have surpassed any Carian knight. A pity."
+        "value": "Sellen believes: had he chosen the path of sorcery, his achievement would not fall short of any Carian knight. He refused."
       },
       {
         "key": "Hewg's assessment",
@@ -990,7 +996,7 @@
         ]
       },
       {
-        "name": "The Merchant's Donkey",
+        "name": "Church of Elleh",
         "calls_3day": 4,
         "logs": [
           {
@@ -1053,7 +1059,8 @@
         "status": "pending",
         "completed_date": null
       }
-    ]
+    ],
+    "notes": "Melina waits at the Site of Grace for the Tarnished's return."
   },
   "conversations": [
     {
