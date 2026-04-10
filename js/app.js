@@ -510,11 +510,16 @@ function renderTrades() {
   const closedList = t.closed_positions || t.recent_closed || [];
   const closedRows = closedList.map(p => {
     if (isNewFmt) {
+      // CN: red=profit, green=loss; EN: green=profit, red=loss
+      const profitColor = currentLang === 'cn' ? '#f87171' : '#4ade80';
+      const lossColor   = currentLang === 'cn' ? '#4ade80' : '#f87171';
+      const color = p.profit === true ? profitColor : p.profit === false ? lossColor : profitColor;
       const displayStr = p.display
-        ? `<span style="color:var(--c-red,#f87171);font-size:0.76rem;font-weight:600">${p.display}</span>`
-        : (p.pnl ? (() => { const pos = typeof p.pnl === 'string' ? p.pnl.startsWith('+') : p.pnl >= 0; return `<span class="${pos ? 'c-green' : 'c-red'}">${p.pnl}</span>`; })() : '');
+        ? `<span style="color:${color};font-size:0.76rem;font-weight:600">${p.display}</span>`
+        : '';
+      const dot = p.profit === true ? (currentLang === 'cn' ? '🔴' : '🟢') : (currentLang === 'cn' ? '🟢' : '🔴');
       return `<div class="data-row">
-        <span class="data-dot">🔴</span>
+        <span class="data-dot">${dot}</span>
         <span class="dr-main">${p.asset}</span>
         <span class="dr-meta">${p.type} · ${p.date}</span>
         ${displayStr}
