@@ -513,16 +513,17 @@ function renderTrades() {
       // CN: red=profit, green=loss; EN: green=profit, red=loss
       const profitColor = currentLang === 'cn' ? '#f87171' : '#4ade80';
       const lossColor   = currentLang === 'cn' ? '#4ade80' : '#f87171';
-      const color = p.profit === true ? profitColor : p.profit === false ? lossColor : profitColor;
-      const displayStr = p.display
-        ? `<span style="color:${color};font-size:0.76rem;font-weight:600">${p.display}</span>`
-        : '';
+      const pnlColor = p.profit === true ? profitColor : lossColor;
       const dot = p.profit === true ? (currentLang === 'cn' ? '🔴' : '🟢') : (currentLang === 'cn' ? '🟢' : '🔴');
+      const breakdownStr = p.breakdown
+        ? `<span style="font-size:0.76rem">${p.breakdown}</span>` : '';
+      const pnlStr = p.pnl_display
+        ? `<span style="color:${pnlColor};font-size:0.76rem;font-weight:600">${p.pnl_display}</span>` : '';
       return `<div class="data-row">
         <span class="data-dot">${dot}</span>
         <span class="dr-main">${p.asset}</span>
         <span class="dr-meta">${p.type} · ${p.date}</span>
-        ${displayStr}
+        ${breakdownStr}${pnlStr}
       </div>`;
     }
     return `<div class="data-row">

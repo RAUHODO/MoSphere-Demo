@@ -762,14 +762,15 @@
         "date": "2026-04-12",
         "asset": "Somber Smithing Stone [7]",
         "type": "Short trade",
-        "display": "16,000 x 7",
+        "breakdown": "16,000 x 7",
+        "pnl_display": "+40,000",
         "profit": true
       },
       {
         "date": "2026-04-08",
         "asset": "Fell Omen Hunter Set",
         "type": "Loot liquidation",
-        "display": "+45,000",
+        "pnl_display": "+45,000",
         "profit": true
       }
     ]

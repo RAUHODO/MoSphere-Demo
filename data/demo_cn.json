@@ -762,14 +762,15 @@
         "date": "2026-04-12",
         "asset": "失色锻造石[7]",
         "type": "短线交易",
-        "display": "16,000 x 7",
+        "breakdown": "16,000 x 7",
+        "pnl_display": "+40,000",
         "profit": true
       },
       {
         "date": "2026-04-08",
         "asset": "恶兆猎人套装",
         "type": "战利品变现",
-        "display": "+45,000",
+        "pnl_display": "+45,000",
         "profit": true
       }
     ]
