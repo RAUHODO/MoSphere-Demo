@@ -588,12 +588,12 @@
         "completed_date": null
       },
       {
-        "task": "击败BOSS后记录战斗心得",
+        "task": "每周击败BOSS后记录心得",
         "status": "pending",
         "completed_date": null
       },
       {
-        "task": "睡前统计锻造石数量",
+        "task": "每日统计锻造石存量",
         "status": "pending",
         "completed_date": null
       }
@@ -634,7 +634,7 @@
       "id": 6,
       "category": "建筑",
       "status": "open",
-      "content": "要不要在赐福点多设置一个'训练假人'功能"
+      "content": "能不能在圆桌厅堂放一个训练假人"
     },
     {
       "id": 7,
@@ -676,7 +676,7 @@
       "id": 13,
       "category": "建筑",
       "status": "open",
-      "content": "能不能让修古提供一个'武器对比'的功能"
+      "content": "修古那儿能不能加个武器并排比较的功能"
     },
     {
       "id": 14,
@@ -721,24 +721,27 @@
     "steps": {
       "average": 11500,
       "trend": "▲2100"
-    }
+    },
+    "notes": "黄金鸟爪摄入频率过高。我知道它加卢恩获取量，但你的胃不是锻造台。"
   },
   "trades": {
     "open_positions": [
       {
         "date": "2026-04-05",
         "asset": "失色锻造石[8]",
-        "type": "现货持仓",
+        "type": "战利品囤积",
         "direction": "多",
-        "price": "15000/个",
-        "status": "🟡"
+        "price": "成本 90,000 · 估值 120,000",
+        "status": "🟡",
+        "cost": 90000,
+        "value": 120000
       },
       {
         "date": "2026-04-10",
         "asset": "古龙岩锻造石",
-        "type": "收藏品",
+        "type": "战利品",
         "direction": "多",
-        "price": "200000",
+        "price": "—",
         "status": "🟢"
       },
       {
@@ -755,7 +758,9 @@
         "date": "2026-04-12",
         "asset": "失色锻造石[7]",
         "type": "短线交易",
-        "pnl": "+56000卢恩"
+        "pnl": "+40000卢恩",
+        "cost": 72000,
+        "sell": 112000
       },
       {
         "date": "2026-04-08",
@@ -767,8 +772,8 @@
   },
   "finance": {
     "monthly_income": 1083000,
-    "monthly_expense": 591000,
-    "net": 492000,
+    "monthly_expense": 590200,
+    "net": 492800,
     "currency": "卢恩",
     "recent_transactions": [
       {
@@ -786,19 +791,19 @@
       {
         "date": "2026-04-15",
         "description": "购买石剑钥匙x3",
-        "amount": 18000,
+        "amount": 12000,
         "type": "expense"
       },
       {
         "date": "2026-04-14",
-        "description": "购买锻造石【3】",
-        "amount": 2400,
+        "description": "购买锻造石【3】x8",
+        "amount": 19200,
         "type": "expense"
       },
       {
         "date": "2026-04-13",
         "description": "卖出卢恩弯弧",
-        "amount": 50000,
+        "amount": 4000,
         "type": "income"
       }
     ],
@@ -806,7 +811,8 @@
       "income": 1083000,
       "expense": 591000
     },
-    "fixed_assets": 1960000
+    "fixed_assets": 1960000,
+    "fixed_assets_note": "装备估值按我收货的价格算。你的猎犬长牙我也只能转卖——我自己不用。"
   },
   "archive": {
     "confirmed": [
@@ -840,7 +846,7 @@
       },
       {
         "key": "对魔法态度",
-        "value": "尊重但不使用（'近战比较诚实'）"
+        "value": "认可其威力，但本人坚持近战"
       },
       {
         "key": "对死亡态度",
@@ -884,7 +890,7 @@
       },
       {
         "key": "瑟濂的评价",
-        "value": "他如果愿意学魔法，成就不会低于任何卡利亚骑士。可惜。"
+        "value": "瑟濂认为：他若学习魔法，成就不低于卡利亚骑士。但他拒绝了。"
       },
       {
         "key": "修古的评价",
@@ -1044,16 +1050,17 @@
         "completed_date": null
       },
       {
-        "task": "击败BOSS记录心得",
+        "task": "每周击败BOSS后记录心得",
         "status": "pending",
         "completed_date": null
       },
       {
-        "task": "睡前统计锻造石",
+        "task": "每日统计锻造石存量",
         "status": "pending",
         "completed_date": null
       }
-    ]
+    ],
+    "notes": "梅琳娜将在赐福点等待褪色者归来。"
   },
   "conversations": [
     {
@@ -1231,7 +1238,7 @@
         },
         {
           "sender": "system",
-          "content": "已进入漫游法师废墟，当前对话对象：魔法师瑟濂。直接说话即可，说「转梅琳娜」退出。"
+          "content": "已进入魔法学院，当前对话对象：魔法师瑟濂。直接说话即可，说「转梅琳娜」退出。"
         },
         {
           "sender": "tarnished",
@@ -1275,7 +1282,7 @@
         },
         {
           "sender": "system",
-          "content": "已离开漫游法师废墟。摘要：褪色者存入新灵感——彗星亚兹勒配合蓝秘密露滴实现无限施法的可能性，分类魔法，与第27条相似但单独存放。"
+          "content": "已离开魔法学院。摘要：褪色者存入新灵感——彗星亚兹勒配合蓝秘密露滴实现无限施法的可能性，分类魔法，与第27条相似但单独存放。"
         }
       ]
     },
@@ -1309,7 +1316,7 @@
         },
         {
           "sender": "melina",
-          "content": "好。就这些。你忙你的。"
+          "content": "好。去忙吧。"
         }
       ]
     }

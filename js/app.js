@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   MoSphere Demo — Main Application
+   Project M.S. Demo — Main Application
    ═══════════════════════════════════════════ */
 
 let data = null;
@@ -130,7 +130,7 @@ function render() {
 
   // Header
   const titleEl = document.getElementById('main-title');
-  titleEl.textContent = meta.title || (currentLang === 'cn' ? 'MoSphere · 赐福点控制面板' : 'MoSphere · Site of Grace Control Panel');
+  titleEl.textContent = meta.title || (currentLang === 'cn' ? 'Project M.S. · 赐福点控制面板' : 'Project M.S. · Site of Grace Control Panel');
 
   document.getElementById('lang-toggle').textContent = lbl.toggleTo;
   document.getElementById('status-bar').innerHTML =
@@ -140,6 +140,12 @@ function render() {
     (meta.subtitle ? `<span class="status-item" style="color:var(--text-dim)">${meta.subtitle}</span>` : '');
 
   document.getElementById('buildings-title').textContent = lbl.buildings;
+  const footerEl = document.getElementById('footer-text');
+  if (footerEl) {
+    footerEl.textContent = currentLang === 'cn'
+      ? '本页面为 Project M.S. 项目演示，所有数据均为虚构，采用《艾尔登法环》世界观包装。Project M.S. 是一个个人 AI 操作系统项目。'
+      : 'Demo with fictional data. Project M.S. is a personal AI OS project.';
+  }
   renderConvAccordion();
   renderBuildings();
   renderAccordion();
@@ -208,6 +214,7 @@ function renderBuildingDetail(sorted) {
     ${b.recent_logs.map(l =>
       `<div class="log-row"><span class="log-time">${l.time}</span><span class="log-summary">${l.summary}</span></div>`
     ).join('')}
+    ${b.recent_logs.length < 5 ? `<div style="text-align:center;color:var(--text-dim);font-size:0.72rem;font-style:italic;margin-top:8px;padding-top:6px;border-top:1px solid var(--border)">—— 近三日无更多记录 ——</div>` : ''}
   `;
 }
 
@@ -435,6 +442,7 @@ function renderHealth() {
         <span class="dr-main"><strong>${(st.average ?? 0).toLocaleString()}</strong> 步/日均</span>
         <span class="dr-meta">${st.trend ?? ''}</span>
       </div>
+      ${h.notes ? `<div style="margin-top:10px;padding:8px 10px;background:rgba(58,53,32,0.3);border-left:2px solid var(--gold-dim);border-radius:4px;font-size:0.78rem;color:var(--text-secondary);font-style:italic">${h.notes}</div>` : ''}
     `;
   }
 
@@ -479,11 +487,14 @@ function renderTrades() {
 
   const openRows = (t.open_positions || []).map(p => {
     if (isNewFmt) {
+      const priceStr = (p.cost && p.value)
+        ? `成本 ${p.cost.toLocaleString()} · 估值 ${p.value.toLocaleString()}`
+        : (p.price || '—');
       return `<div class="data-row">
         <span class="data-dot">${p.status || '🟡'}</span>
         <span class="dr-main">${p.asset}</span>
         <span class="dr-meta">${p.type} · ${p.direction}</span>
-        <span style="color:var(--text-secondary)">${p.price}</span>
+        <span style="color:var(--text-secondary);font-size:0.76rem">${priceStr}</span>
       </div>`;
     }
     const pnl = Math.round((p.current - p.open_price) * 100);
@@ -500,10 +511,14 @@ function renderTrades() {
   const closedRows = closedList.map(p => {
     if (isNewFmt) {
       const positive = typeof p.pnl === 'string' ? p.pnl.startsWith('+') : p.pnl >= 0;
+      const costStr = (p.cost && p.sell)
+        ? `<span class="dr-meta" style="font-size:0.72rem">${p.cost.toLocaleString()} → ${p.sell.toLocaleString()}</span>`
+        : '';
       return `<div class="data-row">
         <span class="data-dot">${positive ? '🟢' : '🔴'}</span>
         <span class="dr-main">${p.asset}</span>
         <span class="dr-meta">${p.type} · ${p.date}</span>
+        ${costStr}
         <span class="${positive ? 'c-green' : 'c-red'}">${p.pnl}</span>
       </div>`;
     }
@@ -556,7 +571,8 @@ function renderFinance() {
     </div>
     ${txRows ? `<div class="sub-header">${lbl.recentTx}</div>${txRows}` : ''}
     ${isNewFmt && f.fixed_assets ? `<div class="sub-header">固定资产</div>
-      <div class="data-row"><span class="dr-main">总估值</span><span class="c-gold"><strong>${f.fixed_assets.toLocaleString()} ${currency}</strong></span></div>` : ''}
+      <div class="data-row"><span class="dr-main">总估值</span><span class="c-gold"><strong>${f.fixed_assets.toLocaleString()} ${currency}</strong></span></div>
+      ${f.fixed_assets_note ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--text-dim);font-style:italic">${f.fixed_assets_note}</div>` : ''}` : ''}
   `;
 }
 
@@ -600,6 +616,7 @@ function renderPatrol() {
       <div style="color:var(--gold);font-weight:600;font-size:0.8rem;margin-bottom:10px">${p.timestamp}</div>
       ${buildingRows}
       ${taskRows ? `<div class="sub-header">习惯任务</div>${taskRows}` : ''}
+      ${p.notes ? `<div style="margin-top:12px;font-size:0.75rem;color:var(--text-dim);font-style:italic;text-align:center">${p.notes}</div>` : ''}
     `;
   }
 
@@ -639,6 +656,9 @@ function toggleConvOuter() {
 }
 
 function renderConvBody() {
+  const hint = currentLang === 'cn'
+    ? '⬆️ 以上为系统示范对话。实际使用中褪色者可随时切换建筑与梅琳娜对话。'
+    : '⬆️ The above are sample conversations. In practice, the Tarnished may switch between buildings and speak with Melina at any time.';
   return `<div class="chat-window" style="max-height:none">` +
     (data.conversations || []).map((conv, i) => {
       const isOpen = openConvs.has(i);
@@ -653,6 +673,7 @@ function renderConvBody() {
           </div>
         </div>`;
     }).join('') +
+  `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);text-align:center;font-size:0.72rem;color:var(--text-dim)">${hint}</div>` +
   `</div>`;
 }
 
