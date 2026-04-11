@@ -5,7 +5,7 @@
 let data = null;
 let currentLang = 'cn';
 let activeBuilding = -1;
-const openSections = new Set();
+const openSections = new Set([0]); // 日记默认展开
 const openConvs = new Set();
 
 // Fixed color palette for buildings (by index)
@@ -41,10 +41,11 @@ const SECTIONS = {
 const L = {
   cn: {
     buildings: '⚡ 建筑活跃度',
-    buildingsTooltip: '小镇各建筑最近的使用频率。数字越高说明褪色者最近常去那栋建筑。',
+    buildingsTooltip: '交界地各建筑最近的使用频率。数字越高说明褪色者最近常去那栋建筑。',
     conversations: '💬 示范对话',
-    conversationsTooltip: '褪色者与小镇居民的实际交流记录。可转接不同建筑与对应NPC对话。',
+    conversationsTooltip: '褪色者与交界地居民的实际交流记录。可转接不同建筑与对应NPC对话。',
     headerTooltip: '褪色者的个人中枢。梅琳娜在此观察、记录、做出判断。',
+    headerSubtitle: '个人 AI 助手系统 · 本地运行 · 《艾尔登法环》世界观包装 · 所有数据均为虚构演示',
     statusRunning: '运行中',
     uptime: '运行', backup: '备份',
     today: '今日', sevenD: '7日共',
@@ -60,10 +61,11 @@ const L = {
   },
   en: {
     buildings: '⚡ Building Activity',
-    buildingsTooltip: 'Recent usage frequency of each building. Higher numbers mean the Tarnished visits that building more often.',
+    buildingsTooltip: 'Recent usage frequency of each building in the Lands Between. Higher numbers mean the Tarnished visits that building more often.',
     conversations: '💬 Demo Conversations',
-    conversationsTooltip: 'Real exchanges between the Tarnished and town residents. You can transfer between buildings to talk to different NPCs.',
+    conversationsTooltip: 'Real exchanges between the Tarnished and residents of the Lands Between. You can transfer between buildings to talk to different NPCs.',
     headerTooltip: "The Tarnished's personal hub. Melina observes, records, and makes decisions here.",
+    headerSubtitle: 'Personal AI assistant OS · Local-first · Elden Ring aesthetic · All data is fictional',
     statusRunning: 'Running',
     uptime: 'Uptime', backup: 'Backup',
     today: 'Today', sevenD: '7d total ',
@@ -103,6 +105,7 @@ function toggleLang() {
   currentLang = currentLang === 'cn' ? 'en' : 'cn';
   activeBuilding = -1;
   openSections.clear();
+  openSections.add(0); // 切换语言后日记保持展开
   openConvs.clear();
   loadData().then(render);
 }
@@ -147,6 +150,7 @@ function render() {
   const titleEl = document.getElementById('main-title');
   const titleText = meta.title || (currentLang === 'cn' ? 'Project M.S. · 赐福点控制面板' : 'Project M.S. · Site of Grace Control Panel');
   titleEl.innerHTML = titleText + infoIcon(lbl.headerTooltip);
+  document.getElementById('header-subtitle').textContent = lbl.headerSubtitle;
 
   document.getElementById('lang-toggle').textContent = lbl.toggleTo;
   document.getElementById('status-bar').innerHTML =
@@ -721,6 +725,7 @@ const SENDER_MAP = {
   gideon:    { role: 'assistant', name: '百智爵士基甸' },
   varre:     { role: 'assistant', name: '白面具梵雷' },
   sellen:    { role: 'assistant', name: '魔法师瑟濂' },
+  enia:      { role: 'assistant', name: '解指恩雅' },
 };
 
 function renderMessages(messages) {
