@@ -48,7 +48,8 @@
           "date": "4月7日",
           "summary": "褪色者在赐福点静坐良久，思考战斗节奏"
         }
-      ]
+      ],
+      "history_calls": 1240
     },
     {
       "id": "roundtable",
@@ -89,7 +90,8 @@
           "date": "4月7日",
           "summary": "龙王普拉顿桑克斯雷反机制拆解"
         }
-      ]
+      ],
+      "history_calls": 820
     },
     {
       "id": "perfumer",
@@ -130,7 +132,8 @@
           "date": "4月7日",
           "summary": "建议减少黄金鸟爪摄入量"
         }
-      ]
+      ],
+      "history_calls": 310
     },
     {
       "id": "clocktower",
@@ -171,7 +174,8 @@
           "date": "4月6日",
           "summary": "本周铃兰采集任务创建"
         }
-      ]
+      ],
+      "history_calls": 95
     },
     {
       "id": "forge",
@@ -212,7 +216,8 @@
           "date": "4月7日",
           "summary": "大剑变质'寒冷'完成"
         }
-      ]
+      ],
+      "history_calls": 390
     },
     {
       "id": "ruins",
@@ -253,7 +258,8 @@
           "date": "4月7日",
           "summary": "关于起源魔法师的文献阅读记录"
         }
-      ]
+      ],
+      "history_calls": 265
     },
     {
       "id": "library",
@@ -294,7 +300,8 @@
           "date": "4月7日",
           "summary": "检索艾尔登法环碎片战争完整时间线"
         }
-      ]
+      ],
+      "history_calls": 205
     },
     {
       "id": "merchant",
@@ -335,7 +342,8 @@
           "date": "4月7日",
           "summary": "本月累计收入已达143000卢恩"
         }
-      ]
+      ],
+      "history_calls": 165
     }
   ],
   "diary": [
@@ -698,7 +706,7 @@
       "takeout": 1,
       "breakfast": 5,
       "snack": 0,
-      "home_ratio": "46%"
+      "home_ratio": "75%"
     },
     "sleep": {
       "average": "6h12m",

@@ -58,6 +58,9 @@ const L = {
     diet: '饮食', sleep: '睡眠', weight: '体重', bath: '洗澡',
     exercise: '运动', steps: '步数',
     toggleTo: 'EN',
+    tradeUnit: '笔',
+    historyTotal: '历史共',
+    storageMain: '随身包', storageSD: '木箱',
   },
   en: {
     buildings: '⚡ Building Activity',
@@ -78,8 +81,20 @@ const L = {
     diet: 'Meals', sleep: 'Sleep', weight: 'Weight', bath: 'Bath',
     exercise: 'Exercise', steps: 'Steps',
     toggleTo: '中',
+    tradeUnit: '',
+    historyTotal: 'Total ',
+    storageMain: 'Pouch', storageSD: 'Chest',
   }
 };
+
+function formatBackupDate(iso, lang) {
+  if (!iso) return '';
+  if (lang === 'cn') {
+    const parts = iso.split('-');
+    return parts.length === 3 ? `${parseInt(parts[1])}月${parseInt(parts[2])}日` : iso;
+  }
+  return iso;
+}
 
 // ── Tooltip Helper ──
 function infoIcon(text) {
@@ -118,6 +133,8 @@ function getMeta() {
     status: data.meta.status,
     uptime: data.meta.uptime,
     backup: data.meta.backup_date,
+    storageMain: data.meta.storage_main,
+    storageSD: data.meta.storage_sd,
   };
   const ss = data.system_status;
   return { title: null, subtitle: null, status: ss.status, uptime: ss.uptime, backup: ss.last_backup };
@@ -132,6 +149,7 @@ function getBuildings() {
     color: b.color || BUILDING_COLORS[i % BUILDING_COLORS.length],
     today: b.today_calls ?? b.activity_today ?? 0,
     week:  b.week_calls  ?? b.activity_7d   ?? 0,
+    history: b.history_calls ?? b.total_calls  ?? null,
     sparkline: b.sparkline || b.daily_counts || [],
     description: b.description,
     recent_logs: (b.recent_logs || []).map(l => ({
@@ -156,7 +174,9 @@ function render() {
   document.getElementById('status-bar').innerHTML =
     `<span class="status-item"><span class="status-dot"></span>${lbl.statusRunning}</span>` +
     `<span class="status-item">${lbl.uptime}: ${meta.uptime}</span>` +
-    `<span class="status-item">${lbl.backup}: ${meta.backup}</span>` +
+    `<span class="status-item">${lbl.backup}: ${formatBackupDate(meta.backup, currentLang)}</span>` +
+    (meta.storageMain ? `<span class="status-item">🎒 ${lbl.storageMain} ${meta.storageMain}</span>` : '') +
+    (meta.storageSD   ? `<span class="status-item">📦 ${lbl.storageSD} ${meta.storageSD}</span>` : '') +
     (meta.subtitle ? `<span class="status-item" style="color:var(--text-dim)">${meta.subtitle}</span>` : '');
 
   document.getElementById('buildings-title').innerHTML = lbl.buildings + infoIcon(lbl.buildingsTooltip);
@@ -201,7 +221,7 @@ function renderBuildings() {
         <div class="card-name" style="color:${hasToday ? color : '#aaa'}">${b.name}</div>
         <div class="card-npc">${b.npc_handle}</div>
         <div class="card-count" style="color:${hasToday ? color : '#666'}">${b.today}</div>
-        <div class="card-sub">${lbl.today} · ${lbl.sevenD}${b.week}</div>
+        <div class="card-sub">${lbl.today} · ${lbl.sevenD}${b.week}${b.history != null ? ` · ${lbl.historyTotal}${b.history}` : ''}</div>
         <svg width="${svgW}" height="${SH}">${bars}</svg>
       </div>`;
   }).join('');
@@ -555,7 +575,7 @@ function renderTrades() {
   }).join('');
 
   return `
-    <div class="sub-header">${lbl.openPos}  <span style="color:var(--text-dim);font-weight:400">${(t.open_positions||[]).length} 笔</span></div>
+    <div class="sub-header">${lbl.openPos}  <span style="color:var(--text-dim);font-weight:400">${(t.open_positions||[]).length}${lbl.tradeUnit ? ' ' + lbl.tradeUnit : ''}</span></div>
     ${openRows || '<div style="color:var(--text-dim);font-size:0.8rem;padding:4px 0">暂无</div>'}
     <div class="sub-header">${lbl.closedPos}</div>
     ${closedRows || '<div style="color:var(--text-dim);font-size:0.8rem;padding:4px 0">暂无</div>'}
@@ -591,7 +611,7 @@ function renderFinance() {
     <div class="summary-line">
       💰 ${lbl.income} ${(income||0).toLocaleString()} ${currency}　·
       💸 ${lbl.expense} ${(expense||0).toLocaleString()} ${currency}　·
-      📊 ${lbl.net} <strong class="c-green">${(net||0).toLocaleString()} ${currency}</strong>
+      📊 ${lbl.net} <strong class="${(net||0) >= 0 ? 'c-green' : 'c-red'}">${(net||0) >= 0 ? '' : '-'}${Math.abs(net||0).toLocaleString()} ${currency}</strong>
     </div>
     ${txRows ? `<div class="sub-header">${lbl.recentTx}</div>${txRows}` : ''}
     ${isNewFmt && f.fixed_assets ? `<div class="sub-header">固定资产</div>
@@ -621,7 +641,7 @@ function renderPatrol() {
   if (p.buildings) {
     const buildingRows = p.buildings.map(b =>
       `<div style="margin-bottom:10px">
-        <div style="color:var(--gold);font-size:0.8rem;font-weight:600;margin-bottom:3px">${b.name}  <span style="color:var(--text-dim);font-weight:400">${b.calls_3day}次/3日</span></div>
+        <div style="color:var(--gold);font-size:0.8rem;font-weight:600;margin-bottom:3px">${b.name}  <span style="color:var(--text-dim);font-weight:400">${b.calls_3day}次 · 3日</span></div>
         ${b.logs.map(l =>
           `<div class="data-row"><span class="log-time">${l.date}</span><span class="log-summary">${l.summary}</span></div>`
         ).join('')}

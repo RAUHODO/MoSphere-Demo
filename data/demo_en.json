@@ -48,7 +48,8 @@
         24,
         12,
         11
-      ]
+      ],
+      "history_calls": 1240
     },
     {
       "id": "roundtable",
@@ -89,7 +90,8 @@
         15,
         11,
         12
-      ]
+      ],
+      "history_calls": 820
     },
     {
       "id": "perfumer",
@@ -130,7 +132,8 @@
         8,
         3,
         3
-      ]
+      ],
+      "history_calls": 310
     },
     {
       "id": "clocktower",
@@ -171,7 +174,8 @@
         2,
         0,
         1
-      ]
+      ],
+      "history_calls": 95
     },
     {
       "id": "forge",
@@ -212,7 +216,8 @@
         7,
         5,
         5
-      ]
+      ],
+      "history_calls": 390
     },
     {
       "id": "ruins",
@@ -253,7 +258,8 @@
         6,
         3,
         3
-      ]
+      ],
+      "history_calls": 265
     },
     {
       "id": "library",
@@ -294,7 +300,8 @@
         5,
         2,
         3
-      ]
+      ],
+      "history_calls": 205
     },
     {
       "id": "merchant",
@@ -335,7 +342,8 @@
         4,
         2,
         2
-      ]
+      ],
+      "history_calls": 165
     }
   ],
   "diary": [
@@ -698,7 +706,7 @@
       "takeout": 1,
       "breakfast": 5,
       "snack": 0,
-      "home_ratio": "46%"
+      "home_ratio": "75%"
     },
     "sleep": {
       "average": "6h12m",
