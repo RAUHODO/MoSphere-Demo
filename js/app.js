@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   Mosphere Demo — Main Application
+   MoSphere Demo — Main Application
    ═══════════════════════════════════════════ */
 
 let data = null;
@@ -173,7 +173,7 @@ function render() {
 
   // Header
   const titleEl = document.getElementById('main-title');
-  const titleText = meta.title || (currentLang === 'cn' ? 'Mosphere · 赐福点' : 'Mosphere · Site of Grace');
+  const titleText = meta.title || (currentLang === 'cn' ? 'MoSphere · 赐福点' : 'MoSphere · Site of Grace');
   titleEl.textContent = titleText;
   document.getElementById('header-subtitle').textContent = lbl.headerSubtitle;
 
@@ -191,8 +191,8 @@ function render() {
   const footerEl = document.getElementById('footer-text');
   if (footerEl) {
     footerEl.textContent = currentLang === 'cn'
-      ? '本页面为 Mosphere 项目演示，所有数据均为虚构，采用《艾尔登法环》世界观包装。Mosphere 是一个个人 AI 操作系统项目。'
-      : 'Demo with fictional data. Mosphere is a personal AI OS project.';
+      ? '本页面为 MoSphere 项目演示，所有数据均为虚构，采用《艾尔登法环》世界观包装。MoSphere 是一个个人 AI 操作系统项目。'
+      : 'Demo with fictional data. MoSphere is a personal AI OS project.';
   }
   renderConvAccordion();
   renderBuildings();
