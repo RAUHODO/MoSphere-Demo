@@ -147,6 +147,7 @@ header {
 }
 .view-opt,
 .lang-opt {
+  flex: 1;
   background: transparent;
   color: var(--text-dim);
   border: none;
@@ -331,7 +332,13 @@ section { margin-bottom: 6px; }
 }
 .log-row:last-child { border-bottom: none; }
 .log-time { color: var(--text-dim); min-width: 90px; flex-shrink: 0; }
-.log-summary { color: var(--text-primary); }
+.log-summary { color: var(--text-primary); min-width: 0; overflow-wrap: anywhere; }
+/* 火山官邸 contact 内的 observation 行允许换行（长英文不剪掉） */
+.contact-body .data-row { white-space: normal; align-items: flex-start; font-size: 1rem; }
+.contact-body .data-row .log-summary { white-space: normal; }
+/* 火山官邸 contact 内 content 整体放大一档 */
+.contact-body .contact-field { font-size: 0.85rem; }
+.contact-body .contact-tags .tag-label { font-size: 0.8rem; }
 
 /* ── Accordion ── */
 .accordion { display: flex; flex-direction: column; gap: 4px; }
@@ -383,8 +390,8 @@ section { margin-bottom: 6px; }
   display: none;
   padding: 14px;
   background: var(--bg-primary);
-  font-size: 0.82rem;
-  line-height: 1.7;
+  font-size: 0.92rem;
+  line-height: 1.6;
 }
 .accordion-body.open { display: block; }
 
@@ -394,7 +401,7 @@ section { margin-bottom: 6px; }
   align-items: center;
   gap: 10px;
   padding: 5px 0;
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   border-bottom: 1px solid rgba(58,53,32,0.3);
   white-space: nowrap;
   overflow: hidden;
@@ -495,7 +502,7 @@ section { margin-bottom: 6px; }
   max-width: 78%;
   padding: 9px 13px;
   border-radius: 10px;
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   line-height: 1.6;
   white-space: pre-line;
 }
@@ -680,6 +687,11 @@ footer {
 .patrol-fold-body {
   padding: 4px 6px 0 6px;
 }
+/* 折叠展开后内部行距比常规 .data-row 紧一点 */
+.sched-fold-body .data-row,
+.insp-fold-body .data-row,
+.arch-fold-body .data-row,
+.patrol-fold-body .data-row { padding: 3px 0; }
 
 /* ── Health 单行布局 ── */
 .health-row .dr-label-big {

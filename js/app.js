@@ -8,6 +8,33 @@ let activeBuilding = -1;
 const openSections = new Set([0]); // 日记默认展开
 const openConvs = new Set();
 
+// ── 手机版界面状态持久化（活跃建筑 / 展开 section / 展开对话） ──
+const LS_MOBILE_STATE = 'mosphere.demo.mobile';
+function saveMobileUiState() {
+  try {
+    localStorage.setItem(LS_MOBILE_STATE, JSON.stringify({
+      activeBuilding,
+      openSections: [...openSections],
+      openConvs: [...openConvs],
+    }));
+  } catch {}
+}
+function loadMobileUiState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_MOBILE_STATE) || 'null');
+    if (!s) return;
+    if (typeof s.activeBuilding === 'number') activeBuilding = s.activeBuilding;
+    if (Array.isArray(s.openSections)) {
+      openSections.clear();
+      s.openSections.forEach(i => openSections.add(i));
+    }
+    if (Array.isArray(s.openConvs)) {
+      openConvs.clear();
+      s.openConvs.forEach(i => openConvs.add(i));
+    }
+  } catch {}
+}
+
 // Fixed color palette for buildings (by index)
 const BUILDING_COLORS = ['#4ade80','#60a5fa','#fbbf24','#fb923c','#f87171','#d97706','#818cf8','#c084fc'];
 
@@ -65,6 +92,7 @@ const L = {
     tradeUnit: '笔',
     historyTotal: '历史共',
     storageMain: '随身包', storageSD: '木箱',
+    fixedAssets: '固定资产', totalValuation: '总估值',
     viewMobile: '📱 手机版', viewDesktop: '🖥️ 桌面版',
   },
   en: {
@@ -92,6 +120,7 @@ const L = {
     tradeUnit: '',
     historyTotal: 'Total ',
     storageMain: 'Pouch', storageSD: 'Chest',
+    fixedAssets: 'Fixed Assets', totalValuation: 'Total Valuation',
   }
 };
 
@@ -113,6 +142,8 @@ function infoIcon(text) {
 // ── Init ──
 async function init() {
   await loadData();
+  // 恢复上次手机版状态（手机版默认所有 conv 折叠，桌面版在 renderDesktop 里另设默认）
+  loadMobileUiState();
   render();
   wireViewSwitch();
 }
@@ -135,17 +166,16 @@ function wireViewSwitch() {
 }
 
 async function loadData() {
-  const resp = await fetch(`data/demo_${currentLang}.json`);
+  // 数据 JSON 不在 HTML cache-bust 链上，单独防缓存
+  const resp = await fetch(`data/demo_${currentLang}.json?v=20260424u`, { cache: 'no-cache' });
   data = await resp.json();
 }
 
 function setLang(lang) {
   if (lang === currentLang) return;
   currentLang = lang;
-  activeBuilding = -1;
-  openSections.clear();
-  openSections.add(0); // 切换语言后日记保持展开
-  openConvs.clear();
+  // 切语言保留所有界面状态（activeBuilding / openSections / openConvs）
+  // 索引基础不变，只是文本内容跨语言渲染
   loadData().then(render);
 }
 // 兼容旧入口
@@ -168,6 +198,7 @@ function getMeta() {
 
 function getBuildings() {
   return data.buildings.map((b, i) => ({
+    id: b.id || `b${i}`,
     name: b.name,
     npc_name: b.npc_name,
     npc_handle: b.npc_title || b.npc_handle,
@@ -194,7 +225,11 @@ function render() {
   // Header
   const titleEl = document.getElementById('main-title');
   const titleText = meta.title || (currentLang === 'cn' ? 'MoSphere · 赐福点' : 'MoSphere · Site of Grace');
-  titleEl.textContent = titleText;
+  // 标题旁的 demo 说明 tooltip
+  const demoTip = currentLang === 'cn'
+    ? '本页面为 MoSphere 项目演示，所有数据均为虚构，采用《艾尔登法环》世界观包装。MoSphere 是一个个人 AI 操作系统项目。'
+    : 'This page is a MoSphere project demo. All data is fictional, themed in the Elden Ring universe. MoSphere is a personal AI operating system.';
+  titleEl.innerHTML = `${titleText}${infoIcon(demoTip)}`;
   document.getElementById('header-subtitle').textContent = lbl.headerSubtitle;
 
   // lang-switch active state
@@ -261,6 +296,7 @@ function renderBuildings() {
 
 function toggleBuilding(idx) {
   activeBuilding = activeBuilding === idx ? -1 : idx;
+  saveMobileUiState();
   renderBuildings();
 }
 
@@ -333,6 +369,7 @@ function toggleAccordion(i) {
     body.innerHTML = renderers[i]();
     body.classList.add('open');
   }
+  saveMobileUiState();
 }
 
 // ── Section Renderers ──
@@ -341,18 +378,18 @@ function renderDiary() {
   const list = data.diary || [];
   const renderEntry = d => {
     const meta = [d.weekday, d.weather].filter(Boolean).join('　');
-    return `<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #2a2a2a">
+    return `<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #2a2a2a">
       <div style="color:var(--gold);font-weight:600;margin-bottom:2px">
         ${d.date}
         ${meta ? `<span style="color:var(--text-dim);font-weight:400;font-size:0.75rem">　${meta}</span>` : ''}
         ${d.mood ? `<span style="color:var(--text-dim);font-weight:400;font-size:0.75rem">　${d.mood}</span>` : ''}
       </div>
-      <div style="font-size:0.84rem;line-height:1.8;color:var(--text-primary)">${d.content}</div>
+      <div style="font-size:0.92rem;line-height:1.5;color:var(--text-primary)">${d.content}</div>
     </div>`;
   };
   const recent = list.slice(0, 3).map(renderEntry).join('');
   const older = list.slice(3);
-  const olderLabel = currentLang === 'cn' ? '📚 更早' : '📚 Earlier';
+  const olderLabel = currentLang === 'cn' ? '📚 更多' : '📚 More';
   const olderHtml = older.length
     ? `<details class="diary-older"><summary>${olderLabel}  <span style="color:var(--text-dim);font-weight:400">${older.length}</span></summary>
         <div class="diary-older-body">${older.map(renderEntry).join('')}</div>
@@ -369,7 +406,7 @@ function renderReflection() {
         ${r.date_range ? `<span style="color:var(--text-dim);font-weight:400;font-size:0.75rem">　${r.date_range}</span>` : ''}
       </div>
       <div style="color:var(--text-dim);font-size:0.72rem;margin-bottom:8px">${r.written_at || r.created_at || ''}</div>
-      <div style="font-size:0.84rem;line-height:1.8;white-space:pre-line">${r.content}</div>
+      <div style="font-size:0.92rem;line-height:1.5;white-space:pre-line">${r.content}</div>
     </div>`
   ).join('');
 }
@@ -388,21 +425,21 @@ function renderChronicle() {
       `<span style="color:var(--green);font-size:0.75rem;margin-right:8px">✓ ${t}</span>`
     ).join('');
     const summaries = (c.summary || [c.content]).filter(Boolean).map(s =>
-      `<div style="font-size:0.82rem;line-height:1.7">${s}</div>`
+      `<div style="font-size:0.92rem;line-height:1.6">${s}</div>`
     ).join('');
-    return `<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #2a2a2a">
-      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+    return `<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #2a2a2a">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:2px">
         <span style="color:var(--gold);font-weight:600">${c.date}</span>
         ${meta ? `<span style="color:var(--text-secondary);font-size:0.75rem">　${meta}</span>` : ''}
         ${tagsHtml}
       </div>
-      ${completed ? `<div style="margin-bottom:4px">${completed}</div>` : ''}
+      ${completed ? `<div style="margin-bottom:2px">${completed}</div>` : ''}
       ${summaries}
     </div>`;
   };
-  const recent = list.slice(0, 3).map(renderEntry).join('');
-  const older = list.slice(3);
-  const olderLabel = currentLang === 'cn' ? '📚 更早' : '📚 Earlier';
+  const recent = list.slice(0, 5).map(renderEntry).join('');
+  const older = list.slice(5);
+  const olderLabel = currentLang === 'cn' ? '📚 更多' : '📚 More';
   const olderHtml = older.length
     ? `<details class="diary-older"><summary>${olderLabel}  <span style="color:var(--text-dim);font-weight:400">${older.length}</span></summary>
         <div class="diary-older-body">${older.map(renderEntry).join('')}</div>
@@ -441,9 +478,9 @@ function renderSchedule() {
   const thisMonth = s.this_month || [];
   const longTerm = s.long_term || [];
 
-  function fold(label, items, renderFn) {
+  function fold(label, items, renderFn, openByDefault = false) {
     if (!items.length) return '';
-    return `<details class="sched-fold">
+    return `<details class="sched-fold"${openByDefault ? ' open' : ''}>
       <summary>${label}  <span style="color:var(--text-dim);font-weight:400">${items.length}</span></summary>
       <div class="sched-fold-body">${items.map(renderFn).join('')}</div>
     </details>`;
@@ -451,7 +488,7 @@ function renderSchedule() {
   return `
     <div class="sub-header">${lbl.thisWeek}</div>${(s.this_week || []).map(row).join('')}
     ${fold(lbl.habits, habits, habitRow)}
-    ${fold(lbl.thisMonth, thisMonth, row)}
+    ${fold(lbl.thisMonth, thisMonth, row, true)}
     ${fold(lbl.longTerm, longTerm, row)}
   `;
 }
@@ -584,10 +621,19 @@ function renderTrades() {
 
   const openRows = (t.open_positions || []).map(p => {
     if (isNewFmt) {
-      const priceColor = p.price_color === 'red' ? 'var(--c-red,#f87171)' : p.price_color === 'dim' ? 'var(--text-dim)' : 'var(--gold-dim)';
+      // status 在 data 里按西方惯例（🟢=profit / 🔴=loss / 其他=neutral）
+      // CN 视图翻转：profit→🔴+红 / loss→🟢+绿；EN 视图按原值
+      const isProfit = p.status === '🟢';
+      const isLoss = p.status === '🔴';
+      const priceColor = (!isProfit && !isLoss) ? 'var(--text-dim)'
+        : isProfit ? (currentLang === 'cn' ? '#f87171' : '#4ade80')
+        : (currentLang === 'cn' ? '#4ade80' : '#f87171');
+      const dot = (!isProfit && !isLoss) ? (p.status || '🟡')
+        : isProfit ? (currentLang === 'cn' ? '🔴' : '🟢')
+        : (currentLang === 'cn' ? '🟢' : '🔴');
       const cpStr = p.current_price != null ? `<span style="color:${priceColor};font-size:0.76rem;font-weight:600">${p.current_price.toLocaleString()}</span>` : '';
       return `<div class="data-row">
-        <span class="data-dot">${p.status || '🟡'}</span>
+        <span class="data-dot">${dot}</span>
         <span class="dr-main">${p.asset}</span>
         <span class="dr-meta">${p.type} · ${p.direction}</span>
         <span style="color:var(--text-secondary);font-size:0.76rem">${p.price || '—'}</span>
@@ -607,7 +653,7 @@ function renderTrades() {
   const closedList = t.closed_positions || t.recent_closed || [];
   const closedRows = closedList.map(p => {
     if (isNewFmt) {
-      // CN: red=profit, green=loss; EN: green=profit, red=loss
+      // CN: 红涨绿跌（profit=🔴+红 / loss=🟢+绿）；EN: 反过来（profit=🟢+绿 / loss=🔴+红）
       const profitColor = currentLang === 'cn' ? '#f87171' : '#4ade80';
       const lossColor   = currentLang === 'cn' ? '#4ade80' : '#f87171';
       const pnlColor = p.profit === true ? profitColor : lossColor;
@@ -651,10 +697,15 @@ function renderFinance() {
   const net     = isNewFmt ? f.net             : f.monthly_summary?.net;
   const currency = isNewFmt ? (f.currency || lbl.currency) : (f.monthly_summary?.currency || 'CAD');
 
+  // CN: 红涨绿跌（income=红, expense=绿）；EN: 反过来（income=绿, expense=红），与 trades 同套规则
+  const incomeCls  = currentLang === 'cn' ? 'c-red'   : 'c-green';
+  const expenseCls = currentLang === 'cn' ? 'c-green' : 'c-red';
+  const netCls = (net||0) >= 0 ? incomeCls : expenseCls;
+
   const txRows = (f.recent_transactions || []).map(tx => {
     const icon = tx.type === 'income' ? '💰' : '💸';
     const sign = tx.type === 'income' ? '+' : '-';
-    const cls  = tx.type === 'income' ? 'c-green' : 'c-red';
+    const cls  = tx.type === 'income' ? incomeCls : expenseCls;
     const label = tx.description || tx.note || '';
     return `<div class="data-row">
       <span class="data-dot">${icon}</span>
@@ -666,13 +717,13 @@ function renderFinance() {
 
   return `
     <div class="summary-line">
-      💰 ${lbl.income} ${(income||0).toLocaleString()} ${currency}　·
-      💸 ${lbl.expense} ${(expense||0).toLocaleString()} ${currency}　·
-      📊 ${lbl.net} <strong class="${(net||0) >= 0 ? 'c-green' : 'c-red'}">${(net||0) >= 0 ? '' : '-'}${Math.abs(net||0).toLocaleString()} ${currency}</strong>
+      💰 ${lbl.income} <span class="${incomeCls}">${(income||0).toLocaleString()}</span> ${currency}　·
+      💸 ${lbl.expense} <span class="${expenseCls}">${(expense||0).toLocaleString()}</span> ${currency}　·
+      📊 ${lbl.net} <strong class="${netCls}">${(net||0) >= 0 ? '' : '-'}${Math.abs(net||0).toLocaleString()} ${currency}</strong>
     </div>
     ${txRows ? `<div class="sub-header">${lbl.recentTx}</div>${txRows}` : ''}
-    ${isNewFmt && f.fixed_assets ? `<div class="sub-header">固定资产</div>
-      <div class="data-row"><span class="dr-main">总估值</span><span class="c-gold"><strong>${f.fixed_assets.toLocaleString()} ${currency}</strong></span></div>
+    ${isNewFmt && f.fixed_assets ? `<div class="sub-header">${lbl.fixedAssets}</div>
+      <div class="data-row"><span class="dr-main">${lbl.totalValuation}</span><span class="c-gold"><strong>${f.fixed_assets.toLocaleString()} ${currency}</strong></span></div>
       ${f.fixed_assets_note ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--text-dim);font-style:italic">${f.fixed_assets_note}</div>` : ''}` : ''}
   `;
 }
@@ -746,7 +797,7 @@ function renderTeahouse() {
       c.base_city ? `📍 ${c.base_city}` : '',
       c.company ? `· ${c.company}` : ''
     ].filter(Boolean).join(' ');
-    const metaHtml = meta ? `<div style="color:var(--text-dim);font-size:0.72rem;margin-bottom:4px">${meta}</div>` : '';
+    const metaHtml = meta ? `<div style="color:var(--text-dim);font-size:0.82rem;margin-bottom:4px">${meta}</div>` : '';
 
     const likesHtml = tagRow(LBL.likes, c.likes, 'like');
     const dislikesHtml = tagRow(LBL.dislikes, c.dislikes, 'dislike');
@@ -763,7 +814,7 @@ function renderTeahouse() {
       obsHtml = Object.entries(byCat).map(([cat, list]) => {
         const icon = CAT_ICON[cat] || '•';
         return `<div style="margin-top:6px">
-          <div style="color:var(--text-dim);font-size:0.7rem;font-weight:600;margin-bottom:2px">${icon} ${cat} · ${list.length}</div>
+          <div style="color:var(--text-dim);font-size:0.8rem;font-weight:600;margin-bottom:2px">${icon} ${cat} · ${list.length}</div>
           ${list.map(o =>
             `<div class="data-row"><span class="log-time">${o.occurred_at || ''}</span><span class="log-summary">${stripLeadingDate(o.content)}</span></div>`
           ).join('')}
@@ -800,7 +851,7 @@ function renderPatrol() {
 
   // CN new format: buildings array + weekly_tasks
   if (p.buildings) {
-    const EXPAND = new Set(['圆桌厅堂', '蔷薇教堂', 'Roundtable Hold', 'Rose Church']);
+    const EXPAND = new Set(['圆桌厅堂', 'Roundtable Hold']);
     const buildingRows = p.buildings.map(b => {
       const isOpen = EXPAND.has(b.name);
       return `<details class="patrol-fold"${isOpen ? ' open' : ''}>
@@ -820,18 +871,24 @@ function renderPatrol() {
         ${t.completed_date ? `<span class="dr-meta">${t.completed_date}</span>` : ''}
       </div>`
     ).join('');
+    const tasksLabel = currentLang === 'cn' ? '习惯任务' : 'Weekly Habits';
+    const doneCount = (p.weekly_tasks || []).filter(t => t.status === 'done').length;
+    const totalCount = (p.weekly_tasks || []).length;
 
     return `
       <div style="color:var(--gold);font-weight:600;font-size:0.8rem;margin-bottom:10px">${p.timestamp}</div>
       ${buildingRows}
-      ${taskRows ? `<div class="sub-header">习惯任务</div>${taskRows}` : ''}
+      ${taskRows ? `<details class="patrol-fold">
+        <summary>${tasksLabel}  <span style="color:var(--text-dim);font-weight:400">${doneCount}/${totalCount}</span></summary>
+        <div class="patrol-fold-body">${taskRows}</div>
+      </details>` : ''}
       ${p.notes ? `<div style="margin-top:12px;font-size:0.75rem;color:var(--text-dim);font-style:italic;text-align:center">${p.notes}</div>` : ''}
     `;
   }
 
   // Old format: plain content string
   return `<div style="color:var(--gold);font-weight:600;font-size:0.8rem;margin-bottom:8px">${p.timestamp}</div>
-          <div style="font-size:0.82rem;line-height:1.8;white-space:pre-line">${p.content}</div>`;
+          <div style="font-size:0.92rem;line-height:1.6;white-space:pre-line">${p.content}</div>`;
 }
 
 // ── Conversations ──
@@ -862,6 +919,7 @@ function toggleConvOuter() {
     body.innerHTML = renderConvBody();
     body.classList.add('open');
   }
+  saveMobileUiState();
 }
 
 function renderConvBody() {
@@ -900,6 +958,7 @@ function toggleConv(i) {
     body.innerHTML = renderMessages(data.conversations[i].messages);
     body.classList.add('open');
   }
+  saveMobileUiState();
 }
 
 // Sender name map（双语）

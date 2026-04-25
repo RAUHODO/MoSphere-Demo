@@ -93,9 +93,16 @@ body.view-desktop .cells .building-card {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  overflow: hidden;
   cursor: pointer;
+  position: relative;
   transition: border-color 0.15s, outline 0.15s;
+}
+/* 卡片右上角 ⓘ 描述 */
+body.view-desktop .building-card .card-info { position: absolute; top: 5px; right: 5px; z-index: 2; }
+body.view-desktop .building-card .card-info .info-icon { margin-left: 0; }
+body.view-desktop .building-card .card-info .tooltip-text {
+  left: auto; right: 0;
+  bottom: auto; top: calc(100% + 5px);
 }
 body.view-desktop .cells .building-card:hover { border-color: var(--gold-dim); }
 body.view-desktop .cells .building-card.active {
@@ -167,18 +174,22 @@ body.view-desktop .cells .building-card svg { max-height: 22px; margin: 2px auto
   border-radius: 3px;
 }
 
-/* mid-bar：建筑名 + 进入按钮（灰） */
+/* mid-bar：所有 children 等宽（用 grid auto-columns，children 数变化时自动等分） */
 .mid-bar {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 4px 8px;
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   align-items: stretch;
   gap: 6px;
   flex: 0.5;
   min-height: 40px;
 }
+/* mb-tabs 透明化：让里面的 tab 按钮直接成为 mid-bar 的 grid cell */
+.mid-bar .mb-tabs { display: contents; }
 .mid-bar .mb-name {
   flex: 1;
   display: flex;
@@ -206,16 +217,30 @@ body.view-desktop .cells .building-card svg { max-height: 22px; margin: 2px auto
   cursor: not-allowed;
   opacity: 0.55;
 }
-
-/* mid-bar 多 tab 布局 */
-.mid-bar .mb-tabs {
+.mid-bar .mb-next {
   display: flex;
-  gap: 4px;
-  flex: 2;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.88rem;
+  font-family: inherit;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
 }
+.mid-bar .mb-next:hover {
+  background: var(--bg-card-hover);
+  color: var(--gold);
+  border-color: var(--border-gold);
+}
+
+/* mid-bar tab 按钮（mb-tabs 用 display:contents 透明化，tab 直接是 mid-bar grid 子项） */
 .mid-bar .mb-tab {
-  flex: 1;
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-secondary);
@@ -240,7 +265,7 @@ body.view-desktop .cells .building-card svg { max-height: 22px; margin: 2px auto
 .log-area .log-title {
   color: var(--gold-dim);
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.92rem;
   margin-bottom: 6px;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--border);
@@ -249,7 +274,7 @@ body.view-desktop .cells .building-card svg { max-height: 22px; margin: 2px auto
   display: flex;
   gap: 8px;
   padding: 3px 0;
-  font-size: 0.78rem;
+  font-size: 0.92rem;
 }
 .log-area .log-row .log-time {
   color: var(--text-dim);
@@ -270,24 +295,45 @@ body.view-desktop .cells .building-card svg { max-height: 22px; margin: 2px auto
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
 }
 .right-col .chat-demo {
   flex: 1;
+  min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--border-gold) transparent;
 }
+/* 长英文 title flex 子元素必须能 shrink，否则会撑出右列宽度 */
+.right-col .accordion-header,
+.right-col .conv-group-header { min-width: 0; }
+.right-col .accordion-header .accordion-title,
+.right-col .conv-group-header > span:first-child {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.right-col .chat-window { max-height: none; padding: 10px; overflow-x: hidden; }
 .right-col .chat-demo::-webkit-scrollbar { width: 6px; }
 .right-col .chat-demo::-webkit-scrollbar-thumb {
   background: var(--border-gold);
   border-radius: 3px;
 }
 /* 右列 bubble 更窄一点 */
-.right-col .chat-bubble { max-width: 90%; font-size: 0.8rem; }
+.right-col .chat-bubble { max-width: 90%; font-size: 0.92rem; }
 
 /* 对齐手机版的 conv accordion（但在桌面独立面板里） */
 .right-col .accordion-item { margin-bottom: 4px; }
 .right-col .accordion-header { padding: 8px 10px; font-size: 0.85rem; }
+/* 桌面版示范对话 outer：强制展开，藏掉 chevron，去掉 hover 视觉 */
+.right-col .accordion-header.static .accordion-chevron { display: none; }
+.right-col .accordion-header.static:hover { background: var(--bg-card); }
+/* 右栏 ⓘ tooltip 朝下溢出，避开顶边被 overflow:hidden 裁 */
+.right-col .tooltip-wrapper .tooltip-text {
+  bottom: auto;
+  top: calc(100% + 7px);
+}
 
 /* 桌面 topbar 按钮/方格尺寸微调（紧凑） */
 body.view-desktop .title-box { padding: 4px 10px; }

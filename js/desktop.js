@@ -5,6 +5,7 @@
    ═══════════════════════════════════════════ */
 
 let desktopActiveBuilding = null; // index in sorted buildings
+let _desktopFirstConvSeeded = false; // 首次进桌面版预展开第一段对话
 
 async function initDesktop() {
   // 等 app.js 的 init() 跑完 loadData
@@ -36,23 +37,26 @@ const BUILDING_TABS = {
   '火山官邸':       ['renderTeahouse'],     'Volcano Manor':     ['renderTeahouse'],
 };
 
-// 每个建筑当前 active tab 记忆
+// 每个建筑当前 active tab 记忆（按 id 索引，跨语言切换保留）
 const _desktopTabState = {};
 
 function renderDesktop() {
   renderDesktopBuildings();
-  // conv 右列
+  // conv 右列：桌面版强制展开 + 不可收起；首次也预展第一段
   if (typeof renderConvAccordion === 'function') {
+    openConvs.add(-1);
+    if (!_desktopFirstConvSeeded) { openConvs.add(0); _desktopFirstConvSeeded = true; }
     renderConvAccordion();
-    if (!openConvs.has(-1)) {
-      openConvs.add(-1);
-      const body = document.getElementById('conv-outer-body');
-      const header = document.querySelector('#conv-outer-item .accordion-header');
-      if (body && header && typeof renderConvBody === 'function') {
-        body.innerHTML = renderConvBody();
-        body.classList.add('open');
-        header.classList.add('open');
-      }
+    const header = document.querySelector('#conv-outer-item .accordion-header');
+    const body   = document.getElementById('conv-outer-body');
+    if (header && body && typeof renderConvBody === 'function') {
+      header.classList.add('open');
+      body.classList.add('open');
+      body.innerHTML = renderConvBody();
+      // 拆掉点击 toggle，加 .static 标记给 CSS 隐藏 chevron
+      header.removeAttribute('onclick');
+      header.style.cursor = 'default';
+      header.classList.add('static');
     }
   }
   renderDesktopMidBarAndLog();
@@ -81,10 +85,10 @@ function renderDesktopContent() {
     return { fnName, label: sec ? `${sec.icon} ${sec.label}` : fnName };
   });
 
-  // 当前 tab
-  let activeTab = _desktopTabState[b.name] ?? 0;
+  // 当前 tab（按 building id 索引，跨语言切换保留）
+  let activeTab = _desktopTabState[b.id] ?? 0;
   if (activeTab >= tabs.length) activeTab = 0;
-  _desktopTabState[b.name] = activeTab;
+  _desktopTabState[b.id] = activeTab;
 
   const fnName = tabs[activeTab];
   const fn = typeof window[fnName] === 'function' ? window[fnName] : null;
@@ -93,8 +97,8 @@ function renderDesktopContent() {
   container.innerHTML = body;
 }
 
-function selectDesktopTab(buildingName, tabIdx) {
-  _desktopTabState[buildingName] = tabIdx;
+function selectDesktopTab(buildingId, tabIdx) {
+  _desktopTabState[buildingId] = tabIdx;
   renderDesktopContent();
   renderDesktopMidBarAndLog();
 }
@@ -116,7 +120,15 @@ function renderDesktopBuildings() {
       return `<rect x="${j*(BW+GAP)}" y="${SH-h}" width="${BW}" height="${h}" fill="currentColor" opacity="${op}" rx="1"/>`;
     }).join('');
     const isActive = desktopActiveBuilding === i;
+    // tooltip 文字优先用 SECTIONS 里和建筑同名 section 的描述，没有就退到 b.description
+    const sections = (typeof SECTIONS !== 'undefined' && SECTIONS[currentLang]) || [];
+    const matchSec = sections.find(s => s.label === b.name);
+    const tipText = (matchSec && matchSec.tooltip) || b.description || '';
+    const descIcon = tipText
+      ? `<span class="card-info tooltip-wrapper" onclick="event.stopPropagation()"><span class="info-icon">ⓘ</span><span class="tooltip-text">${tipText}</span></span>`
+      : '';
     return `<div class="building-card grade-${grade}${isActive ? ' active' : ''}" data-idx="${i}" onclick="selectDesktopBuilding(${i})">
+      ${descIcon}
       <div class="card-name">${b.emoji} ${b.name}</div>
       <div class="card-npc">${b.npc_handle}</div>
       <div class="card-count">${b.today}</div>
@@ -139,11 +151,17 @@ function selectDesktopBuilding(i) {
   renderDesktopContent();
 }
 
+function selectNextDesktopBuilding() {
+  const total = (typeof getBuildings === 'function' ? getBuildings().length : 8);
+  const next = ((desktopActiveBuilding ?? 0) + 1) % total;
+  selectDesktopBuilding(next);
+}
+
 function renderDesktopMidBarAndLog() {
   const sorted = getBuildings().sort((a, b) => b.today - a.today);
   const b = sorted[desktopActiveBuilding ?? 0];
   if (!b) return;
-  const enterTxt = currentLang === 'cn' ? `🚪 进入${b.name}` : `🚪 Enter ${b.name}`;
+  const nextTxt = currentLang === 'cn' ? '➡️ 下一栋' : '➡️ Next';
 
   const midBar = document.getElementById('mid-bar');
   if (midBar) {
@@ -152,22 +170,22 @@ function renderDesktopMidBarAndLog() {
       // multi-tab：mid-bar 装 tab 按钮 + 进入按钮
       const sectionsList = (typeof SECTIONS !== 'undefined' && SECTIONS[currentLang]) || [];
       const rendererNames = ['renderDiary','renderReflection','renderSchedule','renderInspirations','renderHealth','renderTrades','renderFinance','renderArchive','renderTeahouse','renderChronicle','renderPatrol'];
-      const activeTab = _desktopTabState[b.name] ?? 0;
+      const activeTab = _desktopTabState[b.id] ?? 0;
       const tabBtns = tabs.map((fnName, i) => {
         const idx = rendererNames.indexOf(fnName);
         const sec = idx >= 0 ? sectionsList[idx] : null;
         const label = sec ? `${sec.icon} ${sec.label}` : fnName;
-        const safeName = b.name.replace(/'/g, "\\'");
-        return `<button type="button" class="mb-tab${i === activeTab ? ' active' : ''}" onclick="selectDesktopTab('${safeName}', ${i})">${label}</button>`;
+        const tip = sec && sec.tooltip ? (typeof infoIcon === 'function' ? infoIcon(sec.tooltip) : '') : '';
+        return `<button type="button" class="mb-tab${i === activeTab ? ' active' : ''}" onclick="selectDesktopTab('${b.id}', ${i})">${label}${tip}</button>`;
       }).join('');
       midBar.innerHTML = `
         <div class="mb-tabs">${tabBtns}</div>
-        <div class="mb-enter" title="demo 不支持进入建筑">${enterTxt}</div>
+        <button type="button" class="mb-next" onclick="selectNextDesktopBuilding()">${nextTxt}</button>
       `;
     } else {
       midBar.innerHTML = `
         <div class="mb-name">${b.emoji} ${b.name}</div>
-        <div class="mb-enter" title="demo 不支持进入建筑">${enterTxt}</div>
+        <button type="button" class="mb-next" onclick="selectNextDesktopBuilding()">${nextTxt}</button>
       `;
     }
   }
