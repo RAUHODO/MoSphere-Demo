@@ -257,6 +257,8 @@ section { margin-bottom: 6px; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* 手机端英文卡名更长，缩一档 */
+body.lang-en:not(.view-desktop) .building-card .card-name { font-size: 0.82rem; }
 .building-card .card-npc {
   font-size: 0.75rem;
   color: var(--text-secondary);

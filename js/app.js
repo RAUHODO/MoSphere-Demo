@@ -236,6 +236,9 @@ function render() {
   document.querySelectorAll('.lang-opt').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === currentLang);
   });
+  // body 语言 class，给 CSS 做英文字号细调
+  document.body.classList.toggle('lang-en', currentLang === 'en');
+  document.body.classList.toggle('lang-cn', currentLang === 'cn');
   // view-switch 按钮双语文字
   document.querySelectorAll('.view-opt').forEach(btn => {
     const v = btn.dataset.view;
