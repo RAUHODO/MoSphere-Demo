@@ -72,12 +72,17 @@ function demoPlaceholderLogoSvg() {
 // 风格：03 印章圆环 + 06 空心建筑线稿 + 比例 B + 正面无透视
 // 全 currentColor 驱动；灰色降级（待落地）自动跟随
 const DEMO_LOGO_BODIES = {
-  // 赐福点 — 弯曲光柱 + 顶端球 + 地面
+  // 赐福点 — v5：拉长水滴火焰（尖朝上）+ 6 根木刺 180° 散开（鸟巢俯视）+ 椭圆地面光圈
   grace: `
     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="22" y1="78" x2="78" y2="78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 50 78 Q 38 54 50 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="50" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
+    <path d="M 50 18 Q 57 24 57 40 Q 57 54 50 66 Q 43 54 43 40 Q 43 24 50 18 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="50" y1="68" x2="28" y2="70" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="32" y2="76" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="40" y2="82" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="60" y2="82" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="68" y2="76" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="72" y2="70" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="50" cy="82" rx="30" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
   // 圆桌厅堂 — 拱顶大堂 + 中门
   roundtable: `
     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
