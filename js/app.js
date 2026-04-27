@@ -105,13 +105,18 @@ const DEMO_LOGO_BODIES = {
     <path d="M 64 82 Q 62 64 50 60 Q 40 50 30 56 Q 22 64 20 82 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
     <path d="M 56 64 Q 50 56 44 64" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
     <path d="M 40 60 Q 34 52 28 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>`,
-  // 大赐福·密室 — 拱形入口 + 中央大光柱
+  // 大赐福·密室 — v2 三指门：方形门 + 顶部横梁 + 中央 zigzag 锯齿裂痕 + 双门把 + 4 透光短线
   clocktower: `
     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="22" y1="82" x2="78" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 24 82 L 24 50 Q 24 26 50 26 Q 76 26 76 50 L 76 82" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 50 82 Q 38 54 50 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="50" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
+    <rect x="26" y="20" width="48" height="62" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="26" y1="30" x2="74" y2="30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 50 32 L 46 42 L 52 50 L 46 58 L 52 66 L 48 76" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="36" cy="52" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="64" cy="52" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="42" y1="42" x2="38" y2="40" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+    <line x1="56" y1="50" x2="60" y2="48" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+    <line x1="42" y1="58" x2="38" y2="60" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+    <line x1="56" y1="66" x2="60" y2="64" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>`,
   // 魔法学院 — v7 月光学派徽章风：新月 + 散星 + 多尖塔城堡剪影 + 玫瑰窗
   ruins: `
     <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
