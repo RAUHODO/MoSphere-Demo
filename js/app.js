@@ -131,14 +131,21 @@ const DEMO_LOGO_BODIES = {
     <circle cx="50" cy="64" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
     <line x1="44" y1="64" x2="56" y2="64" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
     <line x1="50" y1="58" x2="50" y2="70" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>`,
-  // 黄金树大教堂 — 树冠 + 树干嵌门
+  // 黄金树大教堂 — v5 墨鱼设计：大圆顶左主导 + 小圆顶右陪衬 + 主树根贯穿两建筑顶（链接第二建筑顶尖）+ 副根缠绕
   library: `
-    <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="22" y1="82" x2="78" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="50" cy="42" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="46" y1="64" x2="46" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="54" y1="64" x2="54" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 46 76 Q 46 70 50 70 Q 54 70 54 76" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
+    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M 18 78 L 18 50 L 48 50 L 48 78" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 18 50 Q 18 32 33 32 Q 48 32 48 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="33" y1="32" x2="33" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 30 78 L 30 70 Q 30 66 33 66 Q 36 66 36 70 L 36 78" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 56 78 L 56 64 L 76 64 L 76 78" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 56 64 Q 56 54 66 54 Q 76 54 76 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="66" y1="54" x2="66" y2="49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="64" y1="70" x2="64" y2="74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="14" y1="78" x2="82" y2="78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 12 18 Q 25 28 33 22 Q 50 30 66 49 Q 76 58 80 70" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 14 28 Q 12 38 16 50 Q 18 56 22 50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 80 38 Q 82 48 78 56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
   // 埃雷教堂 — 墨鱼定稿（按真实图比例：高瘦钟楼左偏 + 主堂矮宽右侧 + 藤蔓）
   merchant: `
     <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
