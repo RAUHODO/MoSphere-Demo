@@ -92,19 +92,19 @@ const DEMO_LOGO_BODIES = {
     <rect x="28" y="44" width="44" height="38" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
     <path d="M 30 44 Q 50 32 70 44" fill="none" stroke="currentColor" stroke-width="2"/>
     <path d="M 44 82 Q 44 64 50 64 Q 56 64 56 82" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
-  // 蔷薇教堂 — v4：钟楼瘦高顶部断裂 + 主堂双残柱+尖拱残顶 + 红色史莱姆从中部涌出（与埃雷区分点 = 大史莱姆 + 主堂残柱）
+  // 蔷薇教堂 — v4 镜像：钟楼右偏 + 主堂残柱左侧 + 史莱姆涌出方向左转
   perfumer: `
     <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
     <line x1="18" y1="82" x2="82" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <rect x="22" y="18" width="12" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 22 18 L 25 14 L 28 18 L 31 14 L 34 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 25 38 Q 25 30 28 30 Q 31 30 31 38 L 31 44 L 25 44 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-    <line x1="38" y1="82" x2="38" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="70" y1="82" x2="70" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 38 50 L 54 38 L 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 36 82 Q 38 64 50 60 Q 60 50 70 56 Q 78 64 80 82 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 44 64 Q 50 56 56 64" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-    <path d="M 60 60 Q 66 52 72 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>`,
+    <rect x="66" y="18" width="12" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 78 18 L 75 14 L 72 18 L 69 14 L 66 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 75 38 Q 75 30 72 30 Q 69 30 69 38 L 69 44 L 75 44 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="62" y1="82" x2="62" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="30" y1="82" x2="30" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 62 50 L 46 38 L 30 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 64 82 Q 62 64 50 60 Q 40 50 30 56 Q 22 64 20 82 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 56 64 Q 50 56 44 64" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 40 60 Q 34 52 28 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>`,
   // 大赐福·密室 — 拱形入口 + 中央大光柱
   clocktower: `
     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
