@@ -83,12 +83,14 @@ const DEMO_LOGO_BODIES = {
     <line x1="50" y1="68" x2="68" y2="76" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     <line x1="50" y1="68" x2="72" y2="70" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     <ellipse cx="50" cy="82" rx="30" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
-  // 圆桌厅堂 — 拱顶大堂 + 中门
+  // 圆桌厅堂 — v2 双侧高塔（城堡群）+ 中央低圆顶（外方内圆）+ 拱门
   roundtable: `
     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="20" y1="82" x2="80" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <rect x="30" y="50" width="40" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 30 50 Q 50 24 70 50" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="14" y1="82" x2="86" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <rect x="18" y="38" width="10" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="72" y="38" width="10" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="28" y="44" width="44" height="38" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 30 44 Q 50 32 70 44" fill="none" stroke="currentColor" stroke-width="2"/>
     <path d="M 44 82 Q 44 64 50 64 Q 56 64 56 82" fill="none" stroke="currentColor" stroke-width="1.5"/>`,
   // 蔷薇教堂 — 教堂主体 + 三角顶 + 玫瑰窗
   perfumer: `
