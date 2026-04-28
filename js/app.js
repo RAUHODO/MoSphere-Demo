@@ -165,14 +165,20 @@ const DEMO_LOGO_BODIES = {
     <line x1="20" y1="80" x2="80" y2="80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     <path d="M 28 32 Q 25 38 28 44 Q 31 50 28 56" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M 50 52 Q 52 58 49 64" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>`,
-  // 火山官邸 — v2：火山主体（占主导）+ 山脚小宅 + 顶部喷烟
+  // 火山官邸 — v2 墨鱼修订：尖刺山中央留平台 + 大方主体 + 3 错落尖塔（中央高+左右低）+ 主门 + 顶部冒烟 + 远景小岩
   manor: `
-    <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2"/>
-    <line x1="18" y1="82" x2="82" y2="82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 18 82 L 38 26 L 44 32 L 50 24 L 56 32 L 62 26 L 82 82" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 44 22 Q 50 14 56 20 Q 60 12 50 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <rect x="28" y="70" width="14" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-    <polygon points="26,70 44,70 35,62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`,
+    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M 14 84 L 22 70 L 26 76 L 32 60 L 38 68 L 42 60 L 58 60 L 62 68 L 68 60 L 74 76 L 78 70 L 86 84 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="42" y1="60" x2="58" y2="60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <rect x="42" y="42" width="16" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 43 42 L 45 36 L 47 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 47 42 L 50 30 L 53 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 53 42 L 55 36 L 57 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="50" y1="30" x2="50" y2="26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 47 60 L 47 54 Q 47 51 50 51 Q 53 51 53 54 L 53 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 70 24 Q 73 20 70 16 Q 67 12 70 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 18 84 L 20 78 L 22 84" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 80 84 L 82 78 L 84 84" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>`,
 };
 
 function demoBuildingLogoSvg(id) {
